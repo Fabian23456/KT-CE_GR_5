@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class NewBehaviourScript : MonoBehaviour
 {
-   public float moveSpeed = 5f;
+    public float moveSpeed = 5f;
     public float jumpForce = 10000000;
     public bool facingRight = true;
     public float moveX;
 
     private Rigidbody2D rb;
+    public bool isGrounded;
 
     void Start()
     {
@@ -27,7 +28,7 @@ public class NewBehaviourScript : MonoBehaviour
         rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
         
         //Jump
-        if (Input.GetKeyDown(KeyCode.Space)){
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded ==true){
             PlayerJump();
         }
 
@@ -39,6 +40,7 @@ public class NewBehaviourScript : MonoBehaviour
         }
         
     }
+
     void FLipPlayer(){
         facingRight =! facingRight;
         Vector2 localScale = gameObject.transform.localScale;
@@ -48,7 +50,15 @@ public class NewBehaviourScript : MonoBehaviour
 
     void PlayerJump(){
         rb.AddForce(Vector2.up * jumpForce);
+        isGrounded = false;
     }
-}
+
+    void OnCollisionEnter2D (Collision2D col){
+        if (col.gameObject.tag == "ground"){
+            isGrounded = true;
+        }
+    }
+} 
+
 
     
