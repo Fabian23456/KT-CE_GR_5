@@ -1,27 +1,52 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyQualle : MonoBehaviour
 {
-    public float speed;
-    public float XMoveDirection;
-    
-    // Update is called once per frame
-    void Update()
-    {   
-        RaycastHit2D hit = Physics2D.Raycast (transform.position, new Vector2 (XMoveDirection, 0));
-        gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2 (XMoveDirection, 0) * speed;
-        if ( hit.distance < 0.4f){
-            Flip();
+    public Sprite flatSprite;
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Player player = collision.gameObject.GetComponent<Player>();
+
+            if (player.starpower)
+            {
+                Hit();
+            }
+            else if (collision.transform.DotTest(transform, Vector2.down))
+            {
+                Flatten();
+            }
+            else
+            {
+                player.Hit();
+            }
         }
     }
 
-    void Flip (){
-        if (XMoveDirection > 0f){
-            XMoveDirection = -1f;
-        }else{
-            XMoveDirection = 1f; 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Shell"))
+        {
+            Hit();
         }
     }
+
+    private void Flatten()
+    {
+        GetComponent<Collider2D>().enabled = false;
+        GetComponent<EntityMovement>().enabled = false;
+        GetComponent<AnimatedSprite>().enabled = false;
+        GetComponent<SpriteRenderer>().sprite = flatSprite;
+        Destroy(gameObject, 0.5f);
+    }
+
+    private void Hit()
+    {
+        GetComponent<AnimatedSprite>().enabled = false;
+        GetComponent<DeathAnimation>().enabled = true;
+        Destroy(gameObject, 3f);
+    }
+
 }
