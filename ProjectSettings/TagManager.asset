@@ -5,11 +5,16 @@ TagManager:
   serializedVersion: 2
   tags:
   - ground
+  - qualle
+  - coin
+  - bubble
+  - end
+  - pfannenwender
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Player
+  - 
   - Water
   - UI
   - 

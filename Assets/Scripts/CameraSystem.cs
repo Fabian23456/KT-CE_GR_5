@@ -15,9 +15,7 @@ public class CameraSystem : MonoBehaviour
     }
     void LateUpdate()
     {
-      /*  Vector3 desiredPosition = new Vector3(target.position.x + offset.x, target.position.y + offset.y, transform.position.z);
-        Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
-        transform.position = smoothedPosition; */
+
 
         float x = Mathf.Clamp (player.transform.position.x, xMin, xMax);
         float y = Mathf.Clamp (player.transform.position.y, yMin, yMax);
