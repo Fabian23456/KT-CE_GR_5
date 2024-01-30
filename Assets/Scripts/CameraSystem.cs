@@ -11,7 +11,11 @@ public class CameraSystem : MonoBehaviour
     public float yMax;
     
     void Start(){
-        player = GameObject.FindGameObjectWithTag("Player");
+        if(player == null)
+        {
+            player = GameObject.FindGameObjectWithTag("Player");
+        }
+        
     }
     void LateUpdate()
     {

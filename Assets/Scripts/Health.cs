@@ -16,6 +16,6 @@ public class Health : MonoBehaviour
     }
 
     void Die () {
-        SceneManager.LoadScene ("SampleScene");
+        GameManager.Instance.ResetLevel();
     }
 }

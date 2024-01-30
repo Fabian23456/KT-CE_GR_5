@@ -7,36 +7,42 @@ using TMPro;
 
 public class Player_Score : MonoBehaviour
 {
-    public float timeLeft = 120;
-    public int playerScore = 0;
+    private float timeLeft = 40;
     public GameObject timeLeftUI;
     public GameObject playerScoreUI;
-    
+    public GameObject livesUI;
+    public GameObject highScoreUI;
+
+
     // Update is called once per frame
     void Update()
     {
       timeLeft -= Time.deltaTime;
-      
+
       timeLeftUI.GetComponent<TextMeshProUGUI>().text = "Time Left: " + timeLeft.ToString("F2");
-      playerScoreUI.GetComponent<TextMeshProUGUI>().text = "Score: " + playerScore;
-      
-      if (timeLeft < 0.1f){
-        SceneManager.LoadScene ("SampleScene");
+      playerScoreUI.GetComponent<TextMeshProUGUI>().text = "Score: " + GameManager.Instance.score;
+      livesUI.GetComponent<TextMeshProUGUI>().text = "Lives: " + GameManager.Instance.lives;
+      highScoreUI.GetComponent<TextMeshProUGUI>().text = "current Highscore: " + GameManager.Instance.highScore;
+
+        if (timeLeft < 0.1){
+        GameManager.Instance.ResetLevel();
       }  
     }
 
     void OnTriggerEnter2D (Collider2D trig){
       if (trig.gameObject.tag == "end"){
-        CountScore();
         //Hier neues Level laden und timeleft ändern.
-        SceneManager.LoadScene ("SampleScene");
+        GameManager.Instance.NextLevel();
+            CountScore();
+            ResetTimeLeft();
+       
       }
       if (trig.gameObject.tag == "coin"){
-        playerScore += 10;
+            GameManager.Instance.score += 10;
         Destroy(trig.gameObject);
       }
       if (trig.gameObject.tag == "pfannenwender"){
-        playerScore += 50;
+        GameManager.Instance.score += 50;
         Destroy(trig.gameObject);
       }
     }
@@ -44,9 +50,14 @@ public class Player_Score : MonoBehaviour
 
     void CountScore (){
       Debug.Log(DataManagement.datamanagement.score);
-      playerScore = playerScore + (int)(timeLeft * 10);
-      DataManagement.datamanagement.score = playerScore;
+      GameManager.Instance.score = GameManager.Instance.score + (int)(timeLeft * 10);
+      GameManager.Instance.score= GameManager.Instance.score;
+      DataManagement.datamanagement.score = GameManager.Instance.score;
       DataManagement.datamanagement.SaveData();
       Debug.Log(DataManagement.datamanagement.score);
+    }
+    void ResetTimeLeft()
+    {
+        timeLeft = 40;
     }
 }
